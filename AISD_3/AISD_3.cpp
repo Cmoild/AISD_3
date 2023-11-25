@@ -718,7 +718,7 @@ public:
 	void print() {
 		avlnode* x = root;
 		int h = HeightOfTree(root);
-		for (int i = 0; i <= h; i++) {
+		for (int i = h; i >= 0; i--) {
 			wideprint(x, i + 1);
 			cout << endl;
 		}
@@ -745,7 +745,7 @@ void main() {
 	
 	avlTree avl;
 	avlnode* par = nullptr;
-	
+
 	random_device dev;
 	mt19937 rng(dev());
 	for (int i = 0; i < n; i++) {
@@ -768,9 +768,7 @@ void main() {
 		t_h[i] = t.HeightOfTree(t.root);
 		//cout << i << endl;
 	}
-	
 
-	rb.print();
 	//удаление и обход в ширину
 	/*
 	for (int i = 0; i < n; i++) {
