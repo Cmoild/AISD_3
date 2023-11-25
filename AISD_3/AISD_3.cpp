@@ -418,18 +418,18 @@ public:
 		while (x and x != root and x->color == 'b') {
 			if (x == x->parent->left) {
 				w = x->parent->right;
-				if (w->color = 'r') {
+				if (w and w->color == 'r') {
 					w->color = 'b';
 					x->parent->color = 'r';
 					left_rotate(x->parent);
 					w = x->parent->right;
 				}
-				if (w->left and w->right and w->left->color == 'b' and w->right->color == 'b') {
+				if ((!w->left or w->left->color == 'b') and (!w->right or w->right->color == 'b')) {
 					w->color = 'r';
 					x = x->parent;
 				}
 				else {
-					if (w->right->color = 'b') {
+					if (!w->right or w->right->color == 'b') {
 						w->left->color = 'b';
 						w->color = 'r';
 						right_rotate(w);
@@ -443,19 +443,19 @@ public:
 				}
 			}
 			else {
-				w = x->parent->right;
-				if (w->color = 'r') {
+				w = x->parent->left;
+				if (w and w->color == 'r') {
 					w->color = 'b';
 					x->parent->color = 'r';
 					right_rotate(x->parent);
 					w = x->parent->left;
 				}
-				if (w->right->color == 'b' and w->left->color == 'b') {
+				if ((!w->right or w->right->color == 'b') and (!w->left or w->left->color == 'b')) {
 					w->color = 'r';
 					x = x->parent;
 				}
 				else {
-					if (w->left->color = 'b') {
+					if (!w->left or w->left->color == 'b') {
 						w->right->color = 'b';
 						w->color = 'r';
 						left_rotate(w);
@@ -463,12 +463,13 @@ public:
 					}
 					w->color = x->parent->color;
 					x->parent->color = 'b';
-					w->right->color = 'b';
+					w->left->color = 'b';
 					right_rotate(x->parent);
 					x = root;
 				}
 			}
 		}
+		//root->color = 'b';
 	}
 
 	int depth(rbnode* node) {
@@ -735,7 +736,7 @@ void main() {
 	f << "f = lambda n: 2*np.log(n+1)" << endl;
 	f << "g = lambda n: 1.44*np.log2(n + 2)-0.328" << endl;
 	int k = 0;
-	int n = 300;
+	int n = 50;
 	int *t_h = new int[n];
 	float* rbt_h = new float[n];
 	float* avl_h = new float[n];
@@ -749,7 +750,7 @@ void main() {
 	random_device dev;
 	mt19937 rng(dev());
 	for (int i = 0; i < n; i++) {
-		uniform_int_distribution<std::mt19937::result_type> dist6(1, 1000000);
+		uniform_int_distribution<std::mt19937::result_type> dist6(1, 1000);
 		int x = dist6(rng);
 		auto start = chrono::steady_clock::now();
 		
@@ -758,30 +759,31 @@ void main() {
 
 		rbt_h[i] = rb.rb_insert(x);
 		auto start2 = chrono::steady_clock::now();
-		avl.insert(par, avl.root, x);
+		//avl.insert(par, avl.root, x);
 		auto end2 = chrono::steady_clock::now();
 		chrono::duration<double> tm2 = end2 - start2;
-		avl_h[i] = avl.Search(x)->time;
+		//avl_h[i] = avl.Search(x)->time;
 
 		//t.TreeInsert(x);
 		//rbt_h[i] = avl_h[i] = tm.count();
-		t_h[i] = t.HeightOfTree(t.root);
+		//t_h[i] = t.HeightOfTree(t.root);
 		//cout << i << endl;
 	}
 
 	//удаление и обход в ширину
-	/*
+	rb.hght(rb.root);
+	cout << endl;
 	for (int i = 0; i < n; i++) {
 		
 
 		
 		rbt_h[i] = rb.RB_Delete(rb.root);
-
-		
-		avl_h[i] = avl.del(avl.root);
+		rb.hght(rb.root->right);
+		cout << endl;
+		//avl_h[i] = avl.del(avl.root);
 
 	}
-	*/
+	
 	f << "x = [";
 	for (int i = 0; i < n; i++) {
 		if (i != n - 1) f << t_h[i] << ',';
