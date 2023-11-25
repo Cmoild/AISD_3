@@ -708,6 +708,22 @@ public:
 		return tm.count();
 	}
 
+	void wideprint(avlnode* cur, int k) {
+		if (!cur) return;
+		if (cur->height == k) cout << cur->data << " ";
+		wideprint(cur->left, k);
+		wideprint(cur->right, k);
+	}
+
+	void print() {
+		avlnode* x = root;
+		int h = HeightOfTree(root);
+		for (int i = 0; i <= h; i++) {
+			wideprint(x, i + 1);
+			cout << endl;
+		}
+	}
+
 };
 
 
@@ -804,5 +820,4 @@ void main() {
 	f << endl << "plt.show()";
 	f.close();
 	//system("python graph.py");
-	//dump0(rb.root);
 }
