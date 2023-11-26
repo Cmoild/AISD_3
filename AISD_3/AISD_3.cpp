@@ -733,10 +733,12 @@ void main() {
 	f.open("graph.py", ios::out);
 	f << "from matplotlib import pyplot as plt" << endl << endl;
 	f << "import numpy as np" << endl;
-	f << "f = lambda n: 2*np.log(n+1)" << endl;
-	f << "g = lambda n: 1.44*np.log2(n + 2)-0.328" << endl;
+	f << "from scipy.optimize import curve_fit\n\n";
+	f << "def f(x, a) :\n\treturn (a * np.log(x))\n";
+	//f << "f = lambda n: 2*np.log(n+1)" << endl;
+	//f << "g = lambda n: 1.44*np.log2(n + 2)-0.328" << endl;
 	int k = 0;
-	int n = 50;
+	int n = 15000;
 	int *t_h = new int[n];
 	float* rbt_h = new float[n];
 	float* avl_h = new float[n];
@@ -750,27 +752,28 @@ void main() {
 	random_device dev;
 	mt19937 rng(dev());
 	for (int i = 0; i < n; i++) {
-		uniform_int_distribution<std::mt19937::result_type> dist6(1, 1000);
+		uniform_int_distribution<std::mt19937::result_type> dist6(1, 1000000);
 		int x = dist6(rng);
 		auto start = chrono::steady_clock::now();
-		
+		//rb.rb_insert(x);
 		auto end = chrono::steady_clock::now();
 		chrono::duration<double> tm = end - start;
 
 		rbt_h[i] = rb.rb_insert(x);
 		auto start2 = chrono::steady_clock::now();
-		//avl.insert(par, avl.root, x);
+		avl.insert(par, avl.root, x);
 		auto end2 = chrono::steady_clock::now();
 		chrono::duration<double> tm2 = end2 - start2;
-		//avl_h[i] = avl.Search(x)->time;
-
+		avl_h[i] = avl.Search(x)->time;
+		//avl_h[i] = avl.HeightOfTree(avl.root);
 		//t.TreeInsert(x);
 		//rbt_h[i] = avl_h[i] = tm.count();
-		//t_h[i] = t.HeightOfTree(t.root);
-		//cout << i << endl;
+		t_h[i] = t.HeightOfTree(t.root);
+		cout << i << endl;
 	}
 
 	//удаление и обход в ширину
+	/*
 	rb.hght(rb.root);
 	cout << endl;
 	for (int i = 0; i < n; i++) {
@@ -783,37 +786,45 @@ void main() {
 		//avl_h[i] = avl.del(avl.root);
 
 	}
-	
+	*/
 	f << "x = [";
 	for (int i = 0; i < n; i++) {
 		if (i != n - 1) f << t_h[i] << ',';
 		else f << t_h[i] << ']';
 	}
-	f << endl << "y = [";
+	f << endl << "y = np.array([";
 	for (int i = 0; i < n; i++) {
 		if (i != n - 1) f << rbt_h[i] << ',';
-		else f << rbt_h[i] << ']';
+		else f << rbt_h[i] << "])";
 	}
-	f << endl << "a = [";
+	f << endl << "a = np.array([";
 	for (int i = 0; i < n; i++) {
 		if (i != n - 1) f << avl_h[i] << ',';
-		else f << avl_h[i] << ']';
+		else f << avl_h[i] << "])";
 	}
-	f << endl << "z = [";
+	f << endl << "z = np.array([";
 	for (int i = 0; i < n; i++) {
 		if (i != n - 1) f << i+1 << ',';
-		else f << i+1 << ']';
+		else f << i + 1 << "])";
 	}
+	float sum = 0;
+	for (int i = 0; i < n; i++) sum += avl_h[i];
+	cout << endl << sum / n << endl;
+	f << "\nargrb, _ = curve_fit(f, z, y)";
+	f << "\nargavl, _ = curve_fit(f, z, a)";
+	f << "\nfuncrb = argrb * np.log(z)";
+	f << "\nfuncavl = argavl * np.log(z)";
 	f << "\ntime_rbt = (sum(y)/len(y))";
-	f << "\ntime_avl = (sum(a)/len(a))";
-	f << "\nprint(time_rbt < time_avl)";
+	//f << "\ntime_avl = (sum(a)/len(a))";
+	f << "\nprint(time_rbt)";
 	f << "\nplt.xlabel(\"Number of elements\")\nplt.ylabel(\"Time\")";
-	f << endl << "plt.plot(z,y, linewidth=1, label=\"Red-Black tree\")";
-	f << endl << "plt.plot(z,a, linewidth=1, label=\"AVL Binary tree\")";
+	//f << endl << "plt.plot(z,funcrb, linewidth=1, label=\"Red-Black tree\")";
+	//f << endl << "plt.plot(z,funcavl, linewidth=1, label=\"AVL Binary tree\")";
+	f << endl << "plt.scatter(z, y, c='red', s = 0.4, label=\"Red-Black tree\")";
 	//f << endl << "plt.plot(z,x, linewidth=1, label=\"Binary tree\")";
-	f << endl << "n = np.linspace(0," << n << ")";
-	f << endl << "t = f(n)";
-	f << endl << "e = g(n)";
+	//f << endl << "n = np.linspace(0," << n << ")";
+	//f << endl << "t = f(n)";
+	//f << endl << "e = g(n)";
 	//f << endl << "plt.plot(n,t, linewidth=1)";
 	//f << endl << "plt.plot(n,e, linewidth=1)";
 	f << endl << "plt.legend(loc=\"upper left\")";
