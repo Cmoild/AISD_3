@@ -773,20 +773,21 @@ void main() {
 	}
 
 	//удаление и обход в ширину
-	/*
-	rb.hght(rb.root);
+	
+	//avl.hght(avl.root);
 	cout << endl;
 	for (int i = 0; i < n; i++) {
 		
 
 		
-		rbt_h[i] = rb.RB_Delete(rb.root);
-		rb.hght(rb.root->right);
-		cout << endl;
+		if (avl.root) avl_h[i] = avl.del(avl.root);
+		cout << i << endl;
+		//avl.hght(avl.root);
+		//cout << endl;
 		//avl_h[i] = avl.del(avl.root);
 
 	}
-	*/
+	
 	f << "x = [";
 	for (int i = 0; i < n; i++) {
 		if (i != n - 1) f << t_h[i] << ',';
@@ -809,18 +810,18 @@ void main() {
 	}
 	float sum = 0;
 	for (int i = 0; i < n; i++) sum += avl_h[i];
-	cout << endl << sum / n << endl;
+	cout << endl << sum / 15000 << endl;
 	f << "\nargrb, _ = curve_fit(f, z, y)";
 	f << "\nargavl, _ = curve_fit(f, z, a)";
 	f << "\nfuncrb = argrb * np.log(z)";
 	f << "\nfuncavl = argavl * np.log(z)";
-	f << "\ntime_rbt = (sum(y)/len(y))";
-	//f << "\ntime_avl = (sum(a)/len(a))";
-	f << "\nprint(time_rbt)";
+	//f << "\ntime_rbt = (sum(y)/len(y))";
+	f << "\ntime_avl = (sum(a)/len(a))";
+	f << "\nprint(time_avl)";
 	f << "\nplt.xlabel(\"Number of elements\")\nplt.ylabel(\"Time\")";
 	//f << endl << "plt.plot(z,funcrb, linewidth=1, label=\"Red-Black tree\")";
 	//f << endl << "plt.plot(z,funcavl, linewidth=1, label=\"AVL Binary tree\")";
-	f << endl << "plt.scatter(z, y, c='red', s = 0.4, label=\"Red-Black tree\")";
+	f << endl << "plt.scatter(z, a, c='red', s = 0.4, label=\"AVL tree\")";
 	//f << endl << "plt.plot(z,x, linewidth=1, label=\"Binary tree\")";
 	//f << endl << "n = np.linspace(0," << n << ")";
 	//f << endl << "t = f(n)";
@@ -830,5 +831,5 @@ void main() {
 	f << endl << "plt.legend(loc=\"upper left\")";
 	f << endl << "plt.show()";
 	f.close();
-	//system("python graph.py");
+	system("python graph.py");
 }
