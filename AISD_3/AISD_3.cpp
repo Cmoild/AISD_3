@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include <queue>
+
 using namespace std;
 
 
@@ -543,7 +543,7 @@ public:
 				rotateright(tmp);
 			}
 			//cout << bfactor(tmp);
-			if (balance > -1 and balance < 1) break;
+			if (balance >= -1 and balance <= 1) break;
 
 			tmp = tmp->parent;
 		}
@@ -646,7 +646,9 @@ public:
 		{
 			return;
 		}
-		cout << HeightOfTree(cur->right) - HeightOfTree(cur->left) << ' ';
+		
+		cout << bfactor(cur) << ' ';
+
 		hght(cur->left);
 		hght(cur->right);
 	}
@@ -729,6 +731,7 @@ public:
 
 
 void main() {
+	/*
 	fstream f;
 	f.open("graph.py", ios::out);
 	f << "from matplotlib import pyplot as plt" << endl << endl;
@@ -738,7 +741,7 @@ void main() {
 	//f << "f = lambda n: 2*np.log(n+1)" << endl;
 	//f << "g = lambda n: 1.44*np.log2(n + 2)-0.328" << endl;
 	int k = 0;
-	int n = 15000;
+	int n = 30;
 	int *t_h = new int[n];
 	float* rbt_h = new float[n];
 	float* avl_h = new float[n];
@@ -764,24 +767,24 @@ void main() {
 		avl.insert(par, avl.root, x);
 		auto end2 = chrono::steady_clock::now();
 		chrono::duration<double> tm2 = end2 - start2;
+		//avl.hght(avl.root);
+		cout << endl;
 		avl_h[i] = avl.Search(x)->time;
 		//avl_h[i] = avl.HeightOfTree(avl.root);
 		//t.TreeInsert(x);
 		//rbt_h[i] = avl_h[i] = tm.count();
 		t_h[i] = t.HeightOfTree(t.root);
-		cout << i << endl;
+		//cout << i << endl;
 	}
-
-	//удаление и обход в ширину
 	
 	//avl.hght(avl.root);
-	cout << endl;
+	//cout << endl;
 	for (int i = 0; i < n; i++) {
 		
 
 		
 		if (avl.root) avl_h[i] = avl.del(avl.root);
-		cout << i << endl;
+		//cout  << endl;
 		//avl.hght(avl.root);
 		//cout << endl;
 		//avl_h[i] = avl.del(avl.root);
@@ -831,5 +834,14 @@ void main() {
 	f << endl << "plt.legend(loc=\"upper left\")";
 	f << endl << "plt.show()";
 	f.close();
-	system("python graph.py");
+	//system("python graph.py");
+	*/
+	
+	avlTree avl;
+	avlnode* par = nullptr;
+	avl.insert(par, avl.root, 3);
+	avl.insert(par, avl.root, 2);
+	avl.insert(par, avl.root, 1);
+	avl.print();
+	
 }
